@@ -7,24 +7,39 @@
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <div id="frame">
-    <aside id="rail"></aside>
-    <header id="topbar">
-      <div id="topTitle">Login</div>
-      <div>BoSS HR & Payroll System</div>
-      <div>Role: <span id="roleLabel">Executive</span></div>
+  <div id="container">
+    <header id="topbar" role="banner">
+      <div id="brand">
+        <img src="./boss-logo.jpeg" alt="BoSS logo" class="logo" />
+        <div class="titles">
+          <div id="topTitle">Login</div>
+          <div class="subtitle">BoSS HR & Payroll System</div>
+        </div>
+      </div>
+      <div class="role">Role: <span id="roleLabel">Executive</span></div>
     </header>
-    <main id="content">
-      <section class="screen active" id="screen-login">
-        <img src="boss-logo.jpeg" class="logo"/>
-        <button id="btnLogin">Login</button>
-        <a href="#" id="demoRoleSwitch">Demo role switch</a>
+
+    <main id="content" role="main">
+      <section class="screen active" id="screen-login" aria-labelledby="login-heading">
+        <h1 id="login-heading" class="visually-hidden">Login</h1>
+        <div class="login-panel">
+          <img src="./boss-logo.jpeg" alt="BoSS logo" class="logo-large" />
+          <button id="btnLogin" class="btn primary">Login</button>
+          <a href="#" id="demoRoleSwitch" class="link">Demo role switch</a>
+        </div>
       </section>
-      <section class="screen" id="screen-executive-dashboard">
-        <h2>Executive Dashboard</h2>
+
+      <section class="screen" id="screen-executive-dashboard" aria-labelledby="exec-heading">
+        <h2 id="exec-heading">Executive Dashboard</h2>
+        <p>Welcome to the demo dashboard.</p>
       </section>
     </main>
+
+    <footer id="footer" role="contentinfo">
+      <small>BoSS HR & Payroll Demo</small>
+    </footer>
   </div>
+
   <script src="./script.js"></script>
 </body>
 </html>
