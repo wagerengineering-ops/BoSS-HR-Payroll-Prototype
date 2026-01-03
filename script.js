@@ -1,25 +1,51 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const btnLogin = document.getElementById('btnLogin');
-  const loginScreen = document.getElementById('screen-login');
-  const execScreen = document.getElementById('screen-executive-dashboard');
-  const topTitle = document.getElementById('topTitle');
-  const roleLabel = document.getElementById('roleLabel');
-  const demoRoleSwitch = document.getElementById('demoRoleSwitch');
+(function(){
+  function $(sel){return document.querySelector(sel)}
+  function $all(sel){return Array.from(document.querySelectorAll(sel))}
 
-  if (btnLogin) {
-    btnLogin.addEventListener('click', (e) => {
-      e.preventDefault();
-      loginScreen.classList.remove('active');
-      execScreen.classList.add('active');
-      topTitle.textContent = 'Executive Dashboard';
-    });
+  const routes = ['home','executive','manager','hr','payroll','settings']
+  function activateRoute(route){
+    if(!routes.includes(route)) route = 'home'
+    // show/hide screens
+    $all('.screen').forEach(s=>s.classList.toggle('active', s.dataset.route===route))
+    // update nav
+    $all('.main-nav a').forEach(a=>{
+      const r = a.dataset.route || a.getAttribute('href').replace('#','')
+      const active = r===route
+      a.classList.toggle('active', active)
+      a.setAttribute('aria-current', active? 'true': 'false')
+    })
+    // update document title
+    document.title = 'BoSS – ' + route.charAt(0).toUpperCase()+route.slice(1)
   }
 
-  // Demo role switch toggles role between Executive and Manager for demo purposes
-  if (demoRoleSwitch) {
-    demoRoleSwitch.addEventListener('click', (e) => {
-      e.preventDefault();
-      roleLabel.textContent = roleLabel.textContent === 'Executive' ? 'Manager' : 'Executive';
-    });
+  function navigateTo(route, replace){
+    if(replace) history.replaceState(null,null,'#'+route)
+    else history.pushState(null,null,'#'+route)
+    activateRoute(route)
   }
-});
+
+  document.addEventListener('DOMContentLoaded', ()=>{
+    // route on load
+    const initial = (location.hash||'#home').replace('#','')
+    activateRoute(initial)
+
+    // nav clicks
+    $all('.main-nav a').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        const r = a.dataset.route || a.getAttribute('href').replace('#','')
+        e.preventDefault()
+        navigateTo(r)
+      })
+    })
+
+    // handle back/forward
+    window.addEventListener('popstate', ()=>{
+      const r = (location.hash||'#home').replace('#','')
+      activateRoute(r)
+    })
+
+    // Login button: go to executive
+    const btn = $('#btnLogin')
+    if(btn) btn.addEventListener('click', (e)=>{e.preventDefault(); navigateTo('executive')})
+  })
+})();
